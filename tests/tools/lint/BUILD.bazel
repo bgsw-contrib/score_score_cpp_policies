@@ -11,12 +11,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-import %workspace%/../sanitizers/sanitizers.bazelrc
-
-import %workspace%/../clang_tidy/clang_tidy.bazelrc
-
-common --registry=https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/
-common --registry=https://bcr.bazel.build
-
-build:asan_ubsan_lsan --extra_toolchains=@llvm_toolchain//:cc-toolchain-x86_64-linux
-build:tsan --extra_toolchains=@llvm_toolchain//:cc-toolchain-x86_64-linux
+exports_files(
+    ["linters.bzl"],
+    visibility = ["//visibility:public"],
+)

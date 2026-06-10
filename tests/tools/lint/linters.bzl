@@ -11,12 +11,13 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-import %workspace%/../sanitizers/sanitizers.bazelrc
+"""Clang-tidy aspect and test rule for the score_cpp_policies self-test workspace."""
 
-import %workspace%/../clang_tidy/clang_tidy.bazelrc
+load("@score_cpp_policies//clang_tidy:defs.bzl", "make_clang_tidy_aspect", "make_clang_tidy_test")
 
-common --registry=https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/
-common --registry=https://bcr.bazel.build
+clang_tidy_aspect = make_clang_tidy_aspect(
+    binary = Label("@llvm_toolchain//:clang-tidy"),
+    # No local_configs: the self-test workspace uses only the S-CORE baseline.
+)
 
-build:asan_ubsan_lsan --extra_toolchains=@llvm_toolchain//:cc-toolchain-x86_64-linux
-build:tsan --extra_toolchains=@llvm_toolchain//:cc-toolchain-x86_64-linux
+clang_tidy_test = make_clang_tidy_test(aspect = clang_tidy_aspect)
